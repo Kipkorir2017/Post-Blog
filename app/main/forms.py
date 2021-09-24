@@ -7,9 +7,9 @@ class BlogForm(FlaskForm):
     """
     Form to allow you  add blog
     """
-    blog_title = StringField('Title', validators=[Required()])
-    blog_content = TextAreaField("Blog:", validators=[Required()])
-    submit = SubmitField('Submit')
+    blog_title = StringField('Title:', validators=[Required()])
+    blog_content = TextAreaField('Blog:', validators=[Required()])
+    submit = SubmitField('Submit:')
 
 
 
