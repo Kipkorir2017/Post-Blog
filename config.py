@@ -1,14 +1,10 @@
 import os
 
-
 class Config:
-    '''
-    General configuration parent class
-    '''
+
+    
+    
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    
-    
-    pass
 
 
 class ProdConfig(Config):
