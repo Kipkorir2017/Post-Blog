@@ -15,7 +15,7 @@ class  Blog():
     '''
 
 
-    
+
 
 class Subscriber():
     '''
@@ -28,3 +28,6 @@ class Quote():
     '''
     model class for quotes
     '''
+    def __init__(self, author, quote):
+        self.author= author
+        self.quote = quote
