@@ -43,7 +43,7 @@ def write_comment(id):
 @main.route("/blog/<int:id>/delete",methods=['POST'])
 @login_required
 def delete_comment(id):
-    comment = Comment.query.getCommentId(id)
+    comment = Comment.getCommentId(id)
     db.session.delete(comment)
     db.session.commit()
     flash('Your comment has been deleted!','success')
