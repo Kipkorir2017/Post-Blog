@@ -1,26 +1,27 @@
 {% macro displayBlogs(blogs_list)%}
 {%for blog in blogs_list%}
 <div class="col-md-6">
-    <div class="panel col-sm mt-2 p-3" style="background-color: #efeff5; padding:5%;">
+    <div class="panel col-sm mt-2 p-3" style="background-color: #36e6dd; padding:5%;">
         <div class="display col-md-4">
-            <a href="">
-                <h3 class="title">
-                    
+            <a href="{{url_for('main.write_comment', id = blog.id)}}">
+                <h3 style="font-size:20px;">
+                    {{blog.blog_title}}
                 </h3>
             </a>
-            <h4 class="content">
-                
-            </h4>
+            <p class="content">
+                {{blog.blog_content | truncate (70)}}
+            </p>
             <p style="font-weight: 80; font-size:15pt; color:black "><span style="margin-right:3%;">Posted by :
-                     </span>
+                {{blog.user.username}} </span>Date: {{blog.posted_at.strftime('%B %d, %Y')}}
             </p>
         </div>
         <hr>
         <div class="row">
 
             <div class="btn-group col-md-6">
-                <a href="" type="button"
-                    style="border: none;" class=" btn btn-warning d-flex">
+                <div>
+                <a href="{{url_for('main.delete_blog',id = blog.id, blog_id=blog.id)}}" type="button"
+                    style="border: none;" class=" btn btn-danger d-flex">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-trash-fill" viewBox="0 0 16 16">
@@ -28,8 +29,9 @@
                             d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                     </svg>
                 </a>
-                <a href="" type="button" style="border: none;"
-                    class="btn btn-info d-flex">
+            </div> &nbsp;&nbsp;
+                <a href="{{url_for('main.update_blog', id=blog.id)}}" type="button" style="border: none;"
+                    class="btn btn-success d-flex">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path
@@ -41,17 +43,40 @@
             </div>
 
             <div class=col-md-6>
-                <a href="" type="button" style="border: none;"
+                <a href="{{url_for('main.write_comment',id=blog.id)}}" type="button" style="border: none;"
                     class="btn btn-primary d-flex">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
                         <path
                             d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                    </svg>
-                    Comment</a>
+                    </svg>Comment</a>
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
+{%endmacro%}
+
+{%macro displayComments(comments_list)%}
+{%for comment in comments_list%}
+<div class="col-md-9">
+    <hr>
+    <div class="col-md-9">
+        <p style="font-size:15pt;"><span style="font-weight: 700;">Comment</span> : {{comment.comment}}</p>
+        <p style="font-size:12pt;"><span style="font-weight: 700;">Dated</span> {{comment.comment_date.strftime('%B %d, %Y')}}</p>
+
+        <a href="{{url_for('main.delete_comment',id = comment.id)}}" type="button" style="border: none;"
+            class=" btn btn-danger d-flex">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill"
+                viewBox="0 0 16 16">
+                <path
+                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+            </svg>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <p style="font-size:12pt"> <span style="font-weight: 700;">By:</span> {{comment.user.username}}</p>
+    </div>
+</div>
+{%endfor%}
 {%endmacro%}
