@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect,url_for,flash
+from flask import render_template, request, redirect,url_for,flash,abort
 from ..main.forms import BlogForm, CommentForm
 from flask import render_template, request
 from . import main
@@ -8,6 +8,7 @@ from ..models import User, Comment, Blog, Subscriber
 from flask_login import current_user
 from datetime import datetime
 from flask_login import login_required
+from app.email import mail_message, sub_message
 
 
 @main.route("/", methods=["GET", "BLOG"])
@@ -84,9 +85,8 @@ def new_blog():
 
         # call email addresses from the subscriber table in db
         subscriber = Subscriber.query.all()
-        # for subs in subscriber:
-            # sub_message(blog_title,
-            #             "email/subscription", subs.email, new_blog=new_blog)
+        for subs in subscriber:
+            sub_message(blog_title,"email/subscription", subs.email, new_blog=new_blog)
         return redirect(url_for(".index", id=new_blog.id))
     return render_template("n_blog.html",
                            newblogform=newblogform)
@@ -109,3 +109,12 @@ def update_blog(id):
         form.blog_title.data = blog.blog_title
         form.blog_content.data = blog.blog_content
     return render_template('update.html', blog=blog, form=form)
+
+@main.route('/user/<uname>')
+def profile(uname):
+    user = User.query.filter_by(username = uname).first()
+
+    if user is None:
+        abort(404)
+
+    return render_template("profile/profile.html", user = user)
