@@ -110,30 +110,30 @@ def update_blog(id):
         form.blog_content.data = blog.blog_content
     return render_template('update.html', blog=blog, form=form)
 
-@main.route('/user/<uname>')
-def profile(uname):
-    user = User.query.filter_by(username = uname).first()
+# @main.route('/user/<uname>')
+# def profile(uname):
+#     user = User.query.filter_by(username = uname).first()
 
-    if user is None:
-        abort(404)
+#     if user is None:
+#         abort(404)
 
-    return render_template("profile/profile.html", user = user)
+#     return render_template("profile/profile.html", user = user)
 
-@main.route('/user/<uname>/update',methods = ['GET','POST'])
-@login_required
-def update_profile(uname):
-    user = User.query.filter_by(username = uname).first()
-    if user is None:
-        abort(404)
+# @main.route('/user/<uname>/update',methods = ['GET','POST'])
+# @login_required
+# def update_profile(uname):
+#     user = User.query.filter_by(username = uname).first()
+#     if user is None:
+#         abort(404)
 
-    form = UpdateProfile()
+#     form = UpdateProfile()
 
-    if form.validate_on_submit():
-        user.bio = form.bio.data
+#     if form.validate_on_submit():
+#         user.bio = form.bio.data
 
-        db.session.add(user)
-        db.session.commit()
+#         db.session.add(user)
+#         db.session.commit()
 
-        return redirect(url_for('.profile',uname=user.username))
+#         return redirect(url_for('.profile',uname=user.username))
 
-    return render_template('profile/update.html',form =form)
+#     return render_template('profile/update.html',form =form)
