@@ -43,7 +43,7 @@ def write_comment(id):
 @main.route("/blog/<int:id>/delete",methods=['POST'])
 @login_required
 def delete_comment(id):
-    comment = Comment.getCommentId(id)
+    comment = Comment.query.getCommentId(id)
     db.session.delete(comment)
     db.session.commit()
     flash('Your comment has been deleted!','success')
@@ -63,10 +63,10 @@ def subscribe():
     return redirect(url_for("main.index"))
 
 
-@main.route("/blog/<int:id>/delete",methods=['POST'])
+@main.route("/blog/<int:id>/delete")
 @login_required
 def delete_blog(id):
-    blog = Blog.query.getBlogId(id)
+    blog = Blog.getBlogId(id)
     db.session.delete(blog)
     db.session.commit()
     return redirect(url_for(".index", id=blog.id))
