@@ -5,8 +5,9 @@ from . import main
 from .. import db
 from ..requests import get_quote
 from ..models import User, Comment, Blog, Subscriber
-from flask_login import current_user, login_required
+from flask_login import current_user
 from datetime import datetime
+from flask_login import login_required
 
 
 @main.route("/", methods=["GET", "BLOG"])
@@ -18,7 +19,7 @@ def index():
 
 
 @main.route("/blog/<int:id>", methods=["POST", "GET"])
-
+@login_required
 def write_comment(id):
     blog = Blog.getBlogId(id)
     comment = Comment.get_comments(id)
@@ -39,6 +40,7 @@ def write_comment(id):
 
 
 @main.route("/blog/<int:id>/delete")
+@login_required
 def delete_comment(id):
     comment = Comment.getCommentId(id)
     db.session.delete(comment)
@@ -49,6 +51,7 @@ def delete_comment(id):
 
 
 @main.route('/subscribe')
+@login_required
 def subscribe():
 
     subs = Subscriber(email=current_user.email)
@@ -59,6 +62,7 @@ def subscribe():
 
 
 @main.route("/blog/<int:id>/delete")
+@login_required
 def delete_blog(id):
     blog = Blog.getBlogId(id)
     db.session.delete(blog)
@@ -89,6 +93,7 @@ def new_blog():
 
 
 @main.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_blog(id):
     blog = Blog.query.get_or_404(id)
     form = BlogForm()
