@@ -32,7 +32,7 @@ class UpdateBlogForm(FlaskForm):
 
 class UpdateProfile(FlaskForm):
     username = StringField("Username")
-    bio = TextAreaField("Bio")
+    bio = TextAreaField('Tell us about you.',validators = [Required()])
     email = StringField("Email")
     submit = SubmitField("Update")
 
