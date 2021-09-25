@@ -1,0 +1,32 @@
+{%extends "base.html"%}
+{% import 'bootstrap/wtf.html' as wtf%}
+ 
+{% block styles%}
+{{ super() }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+{% endblock %}
+
+
+{%block content%}
+<br><br><br>
+<div class="container">
+    <div class="container">
+                <div class="row">
+                    <div class="col-md-2"> </div>
+                    <div class="col-md-8 card mt-3 p-5">
+                        <h3 style="">Create a Blog</h3>
+                        <hr>
+
+                        {{wtf.quick_form(newblogform)}}
+
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

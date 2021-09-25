@@ -1,40 +1,24 @@
-from flask import render_template,request,redirect,url_for
-from ..main import BlogForm, CommentForm
+from flask import render_template, request, redirect,url_for
+from ..main.forms import BlogForm, CommentForm
+from flask import render_template, request
 from . import main
-from ..models import User, Comment, Blog, Subscriber
-from datetime import datetime
-from request import get_quotes
 from .. import db
+from ..requests import get_quote
+from ..models import User, Comment, Blog, Subscriber
+from flask_login import current_user, login_required
+from datetime import datetime
 
-@main.route('/')
+
+@main.route("/", methods=["GET", "BLOG"])
 def index():
-    '''
-    view function to display index page and its content
-    '''
-    
-    title='Post-Blog'
-    return render_template('index.html', head=title,)
-
-
-@main.route("/blog/new", methods=["POST", "GET"])
-def new_blog():
-    newblogform = BlogForm()
-    if newblogform.validate_on_submit():
-        blog_title = newblogform.blog_title.data
-        newblogform.blog_title.data = ""
-        blog_content = newblogform.blog_content.data
-        newblogform.blog_content.data = ""
-        new_blog = Blog(blog_title=blog_title,blog_content=blog_content,posted_at=datetime.now(),)
-        new_blog.save_blog()
-
-        
-        subscriber = Subscriber.query.all()  
-        return redirect(url_for(".index", id=new_blog.id))
-    return render_template("new_blog.html",newblogform=newblogform)
-
+    blogs = Blog.get_all_blogs()
+    quote = get_quote()
+    title="Post-Blog"
+    return render_template("index.html",blogs=blogs,quote=quote,head=title)
 
 
 @main.route("/blog/<int:id>", methods=["POST", "GET"])
+
 def write_comment(id):
     blog = Blog.getBlogId(id)
     comment = Comment.get_comments(id)
@@ -43,21 +27,27 @@ def write_comment(id):
     if comment_form.validate_on_submit():
         comment = comment_form.comment.data
         comment_form.comment.data = ""
-        new_comment = Comment(comment=comment,blog_id=blog.id)
+        new_comment = Comment(comment=comment,
+                              user_id=current_user.id,
+                              blog_id=blog.id)
         new_comment.save_comment()
         return redirect(url_for(".write_comment", id=blog.id))
+
     return render_template("comment.html",comment_form=comment_form,comment=comment,blog=blog)
 
-# Function to delete blog
-@main.route("/blog/<int:id>/delete")
 
+
+
+@main.route("/blog/<int:id>/delete")
 def delete_comment(id):
     comment = Comment.getCommentId(id)
     db.session.delete(comment)
     db.session.commit()
     return redirect(url_for(".write_comment", id=comment.id))
 
-# Function to update blog
+
+
+
 @main.route('/subscribe')
 def subscribe():
 
@@ -76,10 +66,28 @@ def delete_blog(id):
     return redirect(url_for(".index", id=blog.id))
 
 
+@main.route("/blog/new", methods=["POST", "GET"])
+def new_blog():
+    newblogform = BlogForm()
+    if newblogform.validate_on_submit():
+        blog_title = newblogform.blog_title.data
+        newblogform.blog_title.data = ""
+        blog_content = newblogform.blog_content.data
+        newblogform.blog_content.data = ""
+        new_blog = Blog(blog_title=blog_title,blog_content=blog_content,posted_at=datetime.now(),user_id=current_user.id)
+        new_blog.save_blog()
+
+        # call email addresses from the subscriber table in db
+        subscriber = Subscriber.query.all()
+        # for subs in subscriber:
+            # sub_message(blog_title,
+            #             "email/subscription", subs.email, new_blog=new_blog)
+        return redirect(url_for(".index", id=new_blog.id))
+    return render_template("n_blog.html",
+                           newblogform=newblogform)
 
 
 
-#Function to update blog
 @main.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_blog(id):
     blog = Blog.query.get_or_404(id)
@@ -95,4 +103,3 @@ def update_blog(id):
         form.blog_title.data = blog.blog_title
         form.blog_content.data = blog.blog_content
     return render_template('update.html', blog=blog, form=form)
-

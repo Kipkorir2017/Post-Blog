@@ -1,8 +1,18 @@
 {% extends 'base.html'%}
 {% import 'macros.html' as macro %}
+
+{% block styles%}
+{{ super() }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+{% endblock %}
+
 {%block content%}
 <div class="container">
-    <div><h2 style="text-align:center;font-weight:bold;">{{head}}</h2></div> 
+    <div class="row">
+    <div><h2 style="text-align:center;font-weight:bold;font-size:25pt">{{head}}</h2></div> 
     <hr style="height: 2px;background:gray">
 
 
@@ -10,25 +20,24 @@
         <div class="row">
             <h2 class="text-center" style="font-size: 25pt; color:tomato; font-weight:900;">Thank you for visiting  Post-Blog</h2>
             <div class="container">
-                <span style="font-size:13pt"></span>
-                <P></P>
+                <p><span style="font-size:20px;font-weight:500">{{quote.quote}}</span></p>
+                <P style="font-size:20pt;font-weight:700">By:{{quote.author}}</P>
             </div>
         </div>
         <div class="row" style="margin-top:3%">
-            <a type="button" class="btn btn-primary text-center" style="font-weight:700"
-                href="">
+            <a type="button" class="btn btn-success text-center" style="font-weight:700"
+                href="{{url_for('main.new_blog')}}">
                 Add New Blog
             </a>
         </div>
     </div>
-
-    <div class="container">
-        <div class="row">
-            
+</div>
+        <div class="col">
+            {{macro.displayBlogs(blogs)}}
         </div>
     </div>
 </body>
 </body>
-
+</div>
 </div>
 {%endblock%}
