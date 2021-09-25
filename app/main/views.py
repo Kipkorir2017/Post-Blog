@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect,url_for
+from flask import render_template, request, redirect,url_for,flash
 from ..main.forms import BlogForm, CommentForm
 from flask import render_template, request
 from . import main
@@ -62,10 +62,10 @@ def subscribe():
     return redirect(url_for("main.index"))
 
 
-@main.route("/blog/<int:id>/delete")
+@main.route("/blog/<int:id>/delete",methods=['POST'])
 @login_required
 def delete_blog(id):
-    blog = Blog.getBlogId(id)
+    blog = Blog.query.getBlogId(id)
     db.session.delete(blog)
     db.session.commit()
     return redirect(url_for(".index", id=blog.id))
