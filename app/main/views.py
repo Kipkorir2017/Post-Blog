@@ -3,7 +3,7 @@ from ..main.forms import BlogForm, CommentForm,UpdateProfile
 from flask import render_template, request
 from . import main
 from .. import db
-from ..requests import get_quote
+from ..request import get_quote
 from ..models import User, Comment, Blog, Subscriber
 from flask_login import current_user
 from datetime import datetime
