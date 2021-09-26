@@ -34,7 +34,7 @@ Users are able to:
 ## Known Bugs
 There are no known bugs at the moment.
 ## Contact Information
-Please feel free to conatct me on these contact details [pkobenj41@gmail.com]
+Please feel free to contact me on these contact details [pkobenj41@gmail.com]
 
 License<a href="https://github.com/Kipkorir2017/Post-Blog/blob/master/LICENSE">MIT<a>
 
